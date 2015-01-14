@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'le_meme'
-require 'pry'
+require 'slop'
 
 memegen = LeMeme.new
 
