@@ -19,6 +19,7 @@ HEREDOC
   on 'm', 'meme=', 'meme template you want to use, see --templates'
   on 'p', 'path=', 'path to an image to use for the meme'
   on 'w', 'watermark=', 'text to watermark the image'
+  on 'o', 'outpath=', 'path to save the final meme to'
 
   on 'templates', 'list all the meme templates' do
     puts memegen.memes.keys.join("\n")
@@ -34,5 +35,9 @@ end
 top = opts[:top] || ARGV[0]
 bottom = opts[:bottom] || ARGV[1]
 
-$stdout.puts memegen.fast_meme(name: opts[:meme], top: top, bottom: bottom, watermark: opts[:watermark])
+if opts[:path]
+  $stdout.puts memegen.meme(path: opts[:path], top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
+else
+  $stdout.puts memegen.fast_meme(name: opts[:meme], top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
+end
 exit
