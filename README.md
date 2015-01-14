@@ -18,6 +18,8 @@ Or install it yourself as:
 
     $ gem install le_meme
 
+If you're getting extconf errors or something like that, make sure you have ImageMagick installed.
+
 ## Usage
 
 ### I WANT A MEME NOW!
@@ -60,6 +62,7 @@ Actually, because I wanted to take some time and clean up the core of [memebot](
 
 ## TODO
 - [ ] Allow dynamic additon of memes to internal memecache
+- [ ] Test `meme` binary
 
 ## License
 
