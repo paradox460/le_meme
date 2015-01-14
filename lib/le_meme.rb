@@ -1,6 +1,7 @@
 require 'le_meme/version'
 require 'rmagick'
 require 'word_wrapper'
+require 'pathname'
 
 # Create some dank memes
 #
