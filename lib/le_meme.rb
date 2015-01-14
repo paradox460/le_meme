@@ -28,8 +28,9 @@ class LeMeme
   # @param top [String] The text you want to appear on the top of the meme.
   # @param bottom [String] The text you want to appear on the bottom of the meme.
   # @param watermark [String] The watermark text. If nil it is omitted
+  # @param outpath [String] Where do you want to put the generated meme. Defaults to /tmp/
   # @return [String] Path to the generated meme
-  def generate(path:, top: nil, bottom: nil, watermark: nil)
+  def generate(path:, top: nil, bottom: nil, watermark: nil, outpath: nil)
     top = (top || '').upcase
     bottom = (bottom || '').upcase
 
@@ -54,7 +55,7 @@ class LeMeme
       end
     end
 
-    output_path = "/tmp/meme-#{Time.now.to_i}#{path.extname}"
+    output_path = outpath || "/tmp/meme-#{Time.now.to_i}#{path.extname}"
     canvas.write(output_path)
     output_path
   end
@@ -67,8 +68,9 @@ class LeMeme
   # @param top [String] The text you want to appear on the top of the meme.
   # @param bottom [String] The text you want to appear on the bottom of the meme.
   # @param watermark [String] The watermark text. If nil it is omitted
+  # @param outpath [String] Where do you want to put the generated meme. Defaults to /tmp/
   # @return [String] Path to the generated meme
-  def fast_meme(name: nil, top: nil, bottom: nil, watermark: nil)
+  def fast_meme(name: nil, top: nil, bottom: nil, watermark: nil, outpath: nil)
     if name.nil?
       path = @memes[@memes.keys.sample]
     elsif @memes[name].nil?
@@ -76,7 +78,7 @@ class LeMeme
     else
       path = @memes[name]
     end
-    generate(path: path, top: top, bottom: bottom, watermark: watermark)
+    generate(path: path, top: top, bottom: bottom, watermark: watermark, outpath: outpath)
   end
   alias_method :m, :fast_meme
 
