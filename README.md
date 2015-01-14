@@ -16,7 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install lememe
+    $ gem install le_meme
 
 ## Usage
 
@@ -43,7 +43,7 @@ meme = LeMeme.new
 meme.m(top: 'dank memes!', bottom: 'bottom text')
 ```
 
-See the [docs]() for all the shrektastic details
+See the [docs](http://www.rubydoc.info/gems/le_meme) for all the shrektastic details
 
 ## Contributing
 
@@ -59,7 +59,6 @@ Because the world needs more dank memes!
 Actually, because I wanted to take some time and clean up the core of [memebot](http://github.com/paradox460/memebot), and figured making the essential meme generation a gem was the best way to do it. Now I can spam my coworkers with memes in hipchat as well.
 
 ## TODO
-- [ ] Test suite
 - [ ] Allow dynamic additon of memes to internal memecache
 
 ## License
