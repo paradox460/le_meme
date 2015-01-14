@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+require 'le_meme'
+require 'pry'
+
+memegen = LeMeme.new
+
+opts = Slop.parse!(strict: true, help: true) do
+  banner <<-HEREDOC
+Usage: meme [options] [top-text] [bottom-text]
+
+Top and bottom may be set by the last 2 unprefixed arguments, or by their respective flags.
+If you don't specify a meme, either via image path or by template, we'll pick one for you.
+HEREDOC
+  separator '---'
+
+  on 't', 'top=', 'top text'
+  on 'b', 'bottom=', 'bottom text.'
+  on 'm', 'meme=', 'meme template you want to use, see --templates'
+  on 'p', 'path=', 'path to an image to use for the meme'
+  on 'w', 'watermark=', 'text to watermark the image'
+
+  on 'templates', 'list all the meme templates' do
+    puts memegen.memes.keys.join("\n")
+    exit
+  end
+  on 'v', 'version', 'display the current version' do
+    $stdout.puts LeMeme::VERSION
+    exit
+  end
+end
+
+
+top = opts[:top] || ARGV[0]
+bottom = opts[:bottom] || ARGV[1]
+
+$stdout.puts memegen.fast_meme(name: opts[:meme], top: top, bottom: bottom, watermark: opts[:watermark])
+exit
