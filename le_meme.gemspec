@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["paradox460@gmail.com"]
   spec.summary       = %q{Dank memes, in gem form}
   spec.description   = %q{A gem that generates memes. Can be used as a library or command-line executable.}
-  spec.homepage      = "http://github.com/paradox460/lememe"
+  spec.homepage      = "http://github.com/paradox460/le_meme"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")

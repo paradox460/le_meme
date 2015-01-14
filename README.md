@@ -26,7 +26,7 @@ Use the command-line tool, `meme`:
 ```sh
 meme 'i want a' 'dank meme'
 ```
-<image goes here>
+![](https://cloud.githubusercontent.com/assets/168193/5734047/7304be40-9b62-11e4-9b2b-0ccbadbb3aa1.jpg)
 
 ### I want to see the command line options
 You can do most meme-ish things from the command-line. It has interactive help at `meme -h`.  
@@ -47,7 +47,7 @@ See the [docs]() for all the shrektastic details
 
 ## Contributing
 
-1. Fork it ( https://github.com/paradox460/lememe/fork )
+1. Fork it ( https://github.com/paradox460/le_meme/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
