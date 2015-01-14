@@ -60,7 +60,7 @@ Actually, because I wanted to take some time and clean up the core of [memebot](
 
 ## TODO
 - [ ] Test suite
-- [ ] Accept non-tmp dir meme generation paths
+- [ ] Allow dynamic additon of memes to internal memecache
 
 ## License
 
