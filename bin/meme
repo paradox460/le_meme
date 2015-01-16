@@ -36,8 +36,8 @@ top = opts[:top] || ARGV[0]
 bottom = opts[:bottom] || ARGV[1]
 
 if opts[:path]
-  $stdout.puts memegen.meme(path: opts[:path], top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
+  $stdout.puts memegen.meme(path: opts[:path].strip, top: top.strip, bottom: bottom.strip, watermark: opts[:watermark].strip, outpath: opts[:outpath].strip)
 else
-  $stdout.puts memegen.fast_meme(name: opts[:meme], top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
+  $stdout.puts memegen.fast_meme(name: opts[:meme].strip, top: top.strip, bottom: bottom.strip, watermark: opts[:watermark].strip, outpath: opts[:outpath].strip)
 end
 exit
