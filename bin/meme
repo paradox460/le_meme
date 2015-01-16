@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/Usr/bin/env ruby
 
 require 'le_meme'
 require 'slop'
@@ -36,8 +36,9 @@ top = opts[:top] || ARGV[0]
 bottom = opts[:bottom] || ARGV[1]
 
 if opts[:path]
-  $stdout.puts memegen.meme(path: opts[:path].strip, top: top.strip, bottom: bottom.strip, watermark: opts[:watermark].strip, outpath: opts[:outpath].strip)
+  $stdout.puts memegen.meme(path: opts[:path], top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
 else
-  $stdout.puts memegen.fast_meme(name: opts[:meme].strip, top: top.strip, bottom: bottom.strip, watermark: opts[:watermark].strip, outpath: opts[:outpath].strip)
+  name = opts[:meme] || ''
+  $stdout.puts memegen.fast_meme(name: name.strip, top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
 end
 exit
