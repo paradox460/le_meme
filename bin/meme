@@ -4,8 +4,7 @@ require 'le_meme'
 require 'slop'
 
 memegen = LeMeme.new
-
-opts = Slop.parse!(strict: true, help: true) do
+opts = Slop.new(strict: true, help: true) do
   banner <<-HEREDOC
 Usage: meme [options] [top-text] [bottom-text]
 
@@ -30,7 +29,12 @@ HEREDOC
     exit
   end
 end
+if ARGV.empty?
+  $stdout.puts opts if $stdout.tty?
+  exit(0)
+end
 
+opts.parse!
 
 top = opts[:top] || ARGV[0]
 bottom = opts[:bottom] || ARGV[1]
@@ -38,7 +42,7 @@ bottom = opts[:bottom] || ARGV[1]
 if opts[:path]
   $stdout.puts memegen.meme(path: opts[:path], top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
 else
-  name = opts[:meme] || ''
-  $stdout.puts memegen.fast_meme(name: name.strip, top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
+  name = opts[:meme].strip if opts[:meme]
+  $stdout.puts memegen.fast_meme(name: name, top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
 end
 exit
