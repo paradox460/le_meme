@@ -4,8 +4,7 @@ require 'le_meme'
 require 'slop'
 
 memegen = LeMeme.new
-
-opts = Slop.parse!(strict: true, help: true) do
+opts = Slop.new(strict: true, help: true) do
   banner <<-HEREDOC
 Usage: meme [options] [top-text] [bottom-text]
 
@@ -20,6 +19,7 @@ HEREDOC
   on 'p', 'path=', 'path to an image to use for the meme'
   on 'w', 'watermark=', 'text to watermark the image'
   on 'o', 'outpath=', 'path to save the final meme to'
+  on 'O', 'open', "Open the file in your system's default image viewer"
 
   on 'templates', 'list all the meme templates' do
     puts memegen.memes.keys.join("\n")
@@ -30,15 +30,36 @@ HEREDOC
     exit
   end
 end
+if ARGV.empty?
+  $stdout.puts opts if $stdout.tty?
+  exit(0)
+end
 
+opts.parse!
 
 top = opts[:top] || ARGV[0]
 bottom = opts[:bottom] || ARGV[1]
 
+
 if opts[:path]
-  $stdout.puts memegen.meme(path: opts[:path], top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
+  output =  memegen.meme(path: opts[:path], top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
 else
-  name = opts[:meme] || ''
-  $stdout.puts memegen.fast_meme(name: name.strip, top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
+  name = opts[:meme].strip if opts[:meme]
+  output =  memegen.fast_meme(name: name, top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
+end
+
+if opts[:open]
+  case RbConfig::CONFIG['host_os']
+  when /mswin|mingw|cygwin/
+    `start #{output}`
+  when /darwin/
+    `open -F #{output}`
+  when /linux|bsd/
+    `xdg-open #{output}`
+  else
+    $stderr.puts "Sorry, don't know how to open on your system! (#{RbConfig::Config['host_os']})"
+  end
+else
+  $stdout.puts output
 end
 exit

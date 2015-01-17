@@ -29,9 +29,10 @@ class LeMeme
   # @param top [String] The text you want to appear on the top of the meme.
   # @param bottom [String] The text you want to appear on the bottom of the meme.
   # @param watermark [String] The watermark text. If nil it is omitted
-  # @param outpath [String] Where do you want to put the generated meme. Defaults to /tmp/
-  # @return [String] Path to the generated meme
-  def generate(path:, top: nil, bottom: nil, watermark: nil, outpath: nil)
+  # @param outpath [String] Where do you want to put the generated meme. Defaults to /tmp/meme-<timestamp>.<extension>
+  # @param nowrite [Boolean] Returns the meme as a blob (string) instead of writing to disk.
+  # @return [String] Either the generated meme object (if nowrite) or a path to the meme
+  def generate(path:, top: nil, bottom: nil, watermark: nil, outpath: nil, nowrite: false)
     top = (top || '').upcase
     bottom = (bottom || '').upcase
 
@@ -57,8 +58,12 @@ class LeMeme
     end
 
     output_path = outpath || "/tmp/meme-#{Time.now.to_i}#{path.extname}"
-    canvas.write(output_path)
-    output_path
+    if nowrite
+      canvas.to_blob
+    else
+      canvas.write(output_path)
+      output_path
+    end
   end
   alias_method :meme, :generate
 
@@ -69,9 +74,10 @@ class LeMeme
   # @param top [String] The text you want to appear on the top of the meme.
   # @param bottom [String] The text you want to appear on the bottom of the meme.
   # @param watermark [String] The watermark text. If nil it is omitted
-  # @param outpath [String] Where do you want to put the generated meme. Defaults to /tmp/
-  # @return [String] Path to the generated meme
-  def fast_meme(name: nil, top: nil, bottom: nil, watermark: nil, outpath: nil)
+  # @param outpath [String] Where do you want to put the generated meme. Defaults to /tmp/meme-<timestamp>.<extension>
+  # @param nowrite [Boolean] Returns the meme as a blob (string) instead of writing to disk.
+  # @return [String] Either the generated meme object (if nowrite) or a path to the meme
+  def fast_meme(name: nil, top: nil, bottom: nil, watermark: nil, outpath: nil, nowrite: false)
     if name.nil?
       path = @memes[@memes.keys.sample]
     elsif @memes[name].nil?
@@ -79,7 +85,7 @@ class LeMeme
     else
       path = @memes[name]
     end
-    generate(path: path, top: top, bottom: bottom, watermark: watermark, outpath: outpath)
+    generate(path: path, top: top, bottom: bottom, watermark: watermark, outpath: outpath, nowrite: nowrite)
   end
   alias_method :m, :fast_meme
 
