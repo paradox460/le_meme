@@ -14,6 +14,7 @@ describe LeMeme do
       x = ['text', nil] * 3
       x.permutation(3).to_a.uniq.each do |top, bottom, watermark|
         it "should generate a meme with top: '#{top}', bottom: '#{bottom}', and watermark: '#{watermark}'" do
+          expect_any_instance_of(Magick::ImageList).to receive(:write).and_return("/tmp/meme-#{Time.now.to_i}.jpg")
           expect(meme.generate(path: image, top: top, bottom: bottom, watermark: watermark)).to match(%r{/tmp/meme-\d+.jpg})
         end
       end
@@ -47,6 +48,7 @@ describe LeMeme do
 
     context 'without a specified template' do
       it 'should generate a meme' do
+        expect_any_instance_of(Magick::ImageList).to receive(:write).and_return("/tmp/meme-#{Time.now.to_i}.jpg")
         expect(meme.fast_meme).to match(%r{/tmp/meme-\d+.jpg})
       end
     end
