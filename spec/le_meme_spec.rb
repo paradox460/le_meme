@@ -25,6 +25,12 @@ describe LeMeme do
         expect(meme.generate(path: image, top: 'top', bottom: 'bottom', outpath: 'test.jpg')).to eq('test.jpg')
       end
     end
+    context 'with nowrite set to true' do
+      it 'should output the meme as a blob string' do
+        mymeme = meme.generate(path: image, nowrite: true)
+        expect(mymeme.size).to eq(43618)
+      end
+    end
   end
 
   describe '#meme' do
