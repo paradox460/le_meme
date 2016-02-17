@@ -37,15 +37,20 @@ Should be straightforward enough for even the dankest memer.
 ### I want to make memes in my ruby application
 Easy enough!
 
+#### Using a template
 ```ruby
 require 'le_meme'
-
-meme = LeMeme.new
-
-meme.m(top: 'dank memes!', bottom: 'bottom text')
+LeMeme::MemeLib.new_with_default_memes.meme(template: 'maymay', top: 'Top text', bottom: 'Bottom Text').to_file
 ```
 
-See the [docs](http://www.rubydoc.info/gems/le_meme) for all the shrektastic details
+#### Using any old image
+
+```ruby
+require 'le_meme'
+LeMeme::Meme.new('~/Desktop/to_be_memed.jpg', top: 'Top text', bottom: 'bottom text').to_file
+```
+
+See the [docs](http://www.rubydoc.info/gems/le_meme) for all the memetastic details
 
 ## Contributing
 
@@ -60,12 +65,7 @@ Because the world needs more dank memes!
 
 Actually, because I wanted to take some time and clean up the core of [memebot](http://github.com/paradox460/memebot), and figured making the essential meme generation a gem was the best way to do it. Now I can spam my coworkers with memes in hipchat as well.
 
-## TODO
-- [ ] Allow dynamic additon of memes to internal memecache
-- [ ] Test `meme` binary
-
-## License
-
+## LICENSE
 ```
 Copyright (c) 2015 Jeff Sandberg
 

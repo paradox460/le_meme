@@ -1,61 +1,90 @@
-#!/Usr/bin/env ruby
+#!/usr/bin/env ruby
 
+require 'bundler/setup'
 require 'le_meme'
-require 'slop'
+require 'optparse'
+require 'pry'
 
-memegen = LeMeme.new
-opts = Slop.new(strict: true, help: true) do
-  banner <<-HEREDOC
+options = {}
+
+if ARGV.empty?
+  exit(0) unless $stdout.tty?
+  $stdout.puts 'Usage: meme [options] [top-text] [bottom-text]'
+  $stdout.puts '    run -h for help'
+  exit(0)
+end
+
+memelib = LeMeme::MemeLib.new_with_default_memes
+
+OptionParser.new do |opts|
+  opts.banner = <<-HEREDOC
 Usage: meme [options] [top-text] [bottom-text]
 
 Top and bottom may be set by the last 2 unprefixed arguments, or by their respective flags.
 If you don't specify a meme, either via image path or by template, we'll pick one for you.
 HEREDOC
-  separator '---'
 
-  on 't', 'top=', 'top text'
-  on 'b', 'bottom=', 'bottom text.'
-  on 'm', 'meme=', 'meme template you want to use, see --templates'
-  on 'p', 'path=', 'path to an image to use for the meme'
-  on 'w', 'watermark=', 'text to watermark the image'
-  on 'o', 'outpath=', 'path to save the final meme to'
-  on 'O', 'open', "Open the file in your system's default image viewer"
+  opts.separator '---'
 
-  on 'templates', 'list all the meme templates' do
-    puts memegen.memes.keys.join("\n")
-    exit
+  opts.on('-tTOP', '--top=TOP', 'top text') do |top|
+    options[:top] = top
   end
-  on 'v', 'version', 'display the current version' do
-    $stdout.puts LeMeme::VERSION
-    exit
+  opts.on('-bBOTTOM', '--bottom=BOTTOM', 'bottom text') do |bottom|
+    options[:bottom] = bottom
   end
-end
-if ARGV.empty?
-  $stdout.puts opts if $stdout.tty?
-  exit(0)
-end
+  opts.on('-wWATERMARK', '--watermark=WATERMARK', 'watermark text') do |watermark|
+    options[:watermark] = watermark
+  end
 
-opts.parse!
+  opts.separator ''
 
-top = opts[:top] || ARGV[0]
-bottom = opts[:bottom] || ARGV[1]
+  opts.on('-mTEMPLATE', '--meme=TEMPLATE', 'meme template you want to use. See --templates for list') do |template|
+    options[:template] = template
+  end
 
+  opts.on('-pPATH', '--path=PATH', 'path to image file to use') do |path|
+    options[:path] = path
+  end
+  opts.on('-oPATH', '--outpath=PATH', 'path to save generated meme') do |path|
+    options[:outpath] = path
+  end
+  opts.on('-O', '--open', 'open when finished') do |o|
+    options[:open] = o
+  end
 
-if opts[:path]
-  output =  memegen.meme(path: opts[:path], top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
-else
-  name = opts[:meme].strip if opts[:meme]
-  output =  memegen.fast_meme(name: name, top: top, bottom: bottom, watermark: opts[:watermark], outpath: opts[:outpath])
-end
+  opts.separator ''
 
-if opts[:open]
+  opts.on('--templates', 'list all the meme templates') do
+    puts memelib.memes.keys.join("\n")
+    exit(0)
+  end
+
+  opts.on('-h', '--help', 'prints this help') do
+    puts opts
+    exit(0)
+  end
+end.parse!
+
+top = options[:top] || ARGV[0]
+bottom = options[:bottom] || ARGV[1]
+
+meme = if options[:path]
+         LeMeme::Meme.new(options[:path], top: top, bottom: bottom, watermark: options[:watermark])
+       else
+         template = options[:template].nil? ? nil : options[:template].strip
+         memelib.meme(template: template, top: top, bottom: bottom, watermark: options[:watermark])
+       end
+
+output = meme.to_file(options[:outpath]).path
+
+if options[:open]
   case RbConfig::CONFIG['host_os']
   when /mswin|mingw|cygwin/
-    `start #{output}`
+    `start '#{output}'`
   when /darwin/
-    `open -F #{output}`
+    `open -F '#{output}'`
   when /linux|bsd/
-    `xdg-open #{output}`
+    `xdg-open '#{output}'`
   else
     $stderr.puts "Sorry, don't know how to open on your system! (#{RbConfig::Config['host_os']})"
   end
