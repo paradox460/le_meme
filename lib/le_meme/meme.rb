@@ -15,6 +15,10 @@ module LeMeme
       @canvas = Magick::ImageList.new(@path)
     end
 
+    # Outputs the meme to the file system
+    #
+    # @param [String] path = nil Where to save the meme
+    # @return [File] File object representing the meme
     def to_file(path = nil)
       path = File.expand_path(path.nil? ? "#{ENV['TMPDIR']}meme-#{Time.now.to_i}.jpg" : path)
       generate!
@@ -25,6 +29,9 @@ module LeMeme
       file
     end
 
+    # Get a binary string representing the meme
+    #
+    # @return [String]
     def to_blob
       generate!
 
